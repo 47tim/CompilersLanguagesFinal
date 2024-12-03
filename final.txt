@@ -1,0 +1,17 @@
+1. program f2024;
+2. (* This program computes and prints the value
+3. of an expression *)
+4. var
+5. (* declare variables *)
+6. a , b2a , c, bba : integer ;
+7. begin
+8. a = 3 ;
+9. b2a = 14 ;
+10. c = 5 ;
+11. print ( c ); (* display c *)
+12.
+13. (* compute the value of the expression *)
+14. bba = a1 * ( b2a + 2 * c) ;
+15. print ( “value=”, bba ) ; (* print the value of bba*)
+16.
+17. end
