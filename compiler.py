@@ -79,7 +79,7 @@ parsingTable = {
         "l": "<identifier> <dec-prime>", "f": "<identifier> <dec-prime>"
     },
     "<dec-prime>": {
-        ",": ", <dec>", ";": "λ"
+        ",": ", <dec>", ";": "λ", ":": "λ"
     },
     "<type>": {
         "integer": "integer"
@@ -114,6 +114,10 @@ parsingTable = {
         "a": "<term> <expr-prime>", "b": "<term> <expr-prime>",
         "c": "<term> <expr-prime>", "d": "<term> <expr-prime>",
         "l": "<term> <expr-prime>", "f": "<term> <expr-prime>",
+        "1": "<term> <expr-prime>", "2": "<term> <expr-prime>",
+        "3": "<term> <expr-prime>", "4": "<term> <expr-prime>",
+        "5": "<term> <expr-prime>", "6": "<term> <expr-prime>",
+        "8": "<term> <expr-prime>", "9": "<term> <expr-prime>",
         "(": "<term> <expr-prime>", "+": "λ", "-": "λ"
     },
     "<expr-prime>": {
@@ -124,6 +128,10 @@ parsingTable = {
         "a": "<factor> <term-prime>", "b": "<factor> <term-prime>",
         "c": "<factor> <term-prime>", "d": "<factor> <term-prime>",
         "l": "<factor> <term-prime>", "f": "<factor> <term-prime>",
+        "1": "<factor> <term-prime>", "2": "<factor> <term-prime>",
+        "3": "<factor> <term-prime>", "4": "<factor> <term-prime>",
+        "5": "<factor> <term-prime>", "6": "<factor> <term-prime>",
+        "8": "<factor> <term-prime>", "9": "<factor> <term-prime>",
         "(": "<factor> <term-prime>"
     },
     "<term-prime>": {
@@ -181,7 +189,7 @@ def compile(userIn: list[str]):
         #Check for if the top of the stack is a rule
         if (stack[0] in parsingTable):
             print("Rule:", stack[0])
-
+            print(userIn[0] in parsingTable[stack[0]],userIn[0][0] in parsingTable[stack[0]],userIn[0] in reservedWords)
             # Decide which rule to follow
             # Deal with reserved words
             if (userIn[0] in reservedWords):
@@ -198,6 +206,7 @@ def compile(userIn: list[str]):
 
             # apply individual letters/digits rule
             elif (userIn[0] in parsingTable[stack[0]]):
+                print("run")
                 rule = parsingTable[stack.pop(0)][userIn[0]]
 
             else:
@@ -227,6 +236,12 @@ def compile(userIn: list[str]):
         elif(stack[0] in reservedWords and userIn[0] not in reservedWords):
                 print(stack[0], "is expected")
                 quit()
+
+        elif(stack[0] == "λ"):
+            stack.pop(0)
+            print("lambda")
+            print(stack[0])
+
 
         #temp else case to prevent inf loop
         else:
@@ -262,6 +277,7 @@ def error(var: str):
                 word = "The right parentheses"
         print(var,word,"is missing")
         quit()
+    quit()
 
 
 
