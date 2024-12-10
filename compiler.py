@@ -60,37 +60,37 @@ parsingTable = {
         "program": "program <identifier>; var <dec-list> begin <stat-list> end"
     },
     "<identifier>": {
-        "a": "<letter><id-prime>", "b": "<letter><id-prime>", "c": "<letter><id-prime>",
-        "d": "<letter><id-prime>", "l": "<letter><id-prime>", "f": "<letter><id-prime>"
+        "a": "<letter> <id-prime>", "b": "<letter> <id-prime>", "c": "<letter> <id-prime>",
+        "d": "<letter> <id-prime>", "l": "<letter> <id-prime>", "f": "<letter> <id-prime>"
     },
     "<id-prime>": {
-        "a": "<letter><id-prime>", "b": "<letter><id-prime>", "c": "<letter><id-prime>",
-        "d": "<letter><id-prime>", "l": "<letter><id-prime>", "f": "<letter><id-prime>",
-        "0": "<digit><id-prime>", "1": "<digit><id-prime>", "2": "<digit><id-prime>",
-        "3": "<digit><id-prime>", "4": "<digit><id-prime>", "5": "<digit><id-prime>",
-        "6": "<digit><id-prime>", "7": "<digit><id-prime>", "8": "<digit><id-prime>",
-        "9": "<digit><id-prime>", ";": "λ", ",": "λ", ":": "λ", "=": "λ"
+        "a": "<letter> <id-prime>", "b": "<letter> <id-prime>", "c": "<letter> <id-prime>",
+        "d": "<letter> <id-prime>", "l": "<letter> <id-prime>", "f": "<letter> <id-prime>",
+        "0": "<digit> <id-prime>", "1": "<digit> <id-prime>", "2": "<digit> <id-prime>",
+        "3": "<digit> <id-prime>", "4": "<digit> <id-prime>", "5": "<digit> <id-prime>",
+        "6": "<digit> <id-prime>", "7": "<digit> <id-prime>", "8": "<digit> <id-prime>",
+        "9": "<digit> <id-prime>", ";": "λ", ",": "λ", ":": "λ", "=": "λ"
     },
     "<dec-list>": {
-        "a": "<dec>:<type>;", "b": "<dec>:<type>;", "c": "<dec>:<type>;",
-        "d": "<dec>:<type>;", "l": "<dec>:<type>;", "f": "<dec>:<type>;"
+        "a": "<dec> : <type> ;", "b": "<dec> : <type>;", "c": "<dec> : <type> ;",
+        "d": "<dec> : <type> ;", "l": "<dec> : <type>;", "f": "<dec> : <type> ;"
     },
     "<dec>": {
-        "a": "<identifier><dec-prime>", "b": "<identifier><dec-prime>",
-        "c": "<identifier><dec-prime>", "d": "<identifier><dec-prime>",
-        "l": "<identifier><dec-prime>", "f": "<identifier><dec-prime>"
+        "a": "<identifier> <dec-prime>", "b": "<identifier> <dec-prime>",
+        "c": "<identifier> <dec-prime>", "d": "<identifier> <dec-prime>",
+        "l": "<identifier> <dec-prime>", "f": "<identifier> <dec-prime>"
     },
     "<dec-prime>": {
-        ",": ",<dec>", ";": "λ"
+        ",": ", <dec>", ";": "λ"
     },
     "<type>": {
         "integer": "integer"
     },
     "<stat-list>": {
-        "a": "<stat><stat-list-prime>", "b": "<stat><stat-list-prime>",
-        "c": "<stat><stat-list-prime>", "d": "<stat><stat-list-prime>",
-        "l": "<stat><stat-list-prime>", "f": "<stat><stat-list-prime>",
-        "print": "<stat><stat-list-prime>"
+        "a": "<stat> <stat-list-prime>", "b": "<stat> <stat-list-prime>",
+        "c": "<stat> <stat-list-prime>", "d": "<stat> <stat-list-prime>",
+        "l": "<stat> <stat-list-prime>", "f": "<stat> <stat-list-prime>",
+        "print": "<stat> <stat-list-prime>"
     },
     "<stat-list-prime>": {
         "a": "<stat-list>", "b": "<stat-list>", "c": "<stat-list>",
@@ -102,34 +102,34 @@ parsingTable = {
         "l": "<assign>", "f": "<assign>", "print": "<write>"
     },
     "<write>": {
-        "print": "print(<str><identifier>);"
+        "print": "print(<str><identifier>);" #REVISIT 
     },
     "<str>": {
-        '"value="': '"value="', "a": "λ", "b": "λ", "c": "λ", "d": "λ", "l": "λ", "f": "λ"
+        "value=": "value=", "a": "λ", "b": "λ", "c": "λ", "d": "λ", "l": "λ", "f": "λ"
     },
     "<assign>": {
-        "a": "<identifier>=<expr>;", "b": "<identifier>=<expr>;",
-        "c": "<identifier>=<expr>;", "d": "<identifier>=<expr>;",
-        "l": "<identifier>=<expr>;", "f": "<identifier>=<expr>;"
+        "a": "<identifier> = <expr> ;", "b": "<identifier> = <expr> ;",
+        "c": "<identifier> = <expr> ;", "d": "<identifier> = <expr> ;",
+        "l": "<identifier> = <expr> ;", "f": "<identifier> = <expr> ;"
     },
     "<expr>": {
-        "a": "<term><expr-prime>", "b": "<term><expr-prime>",
-        "c": "<term><expr-prime>", "d": "<term><expr-prime>",
-        "l": "<term><expr-prime>", "f": "<term><expr-prime>",
-        "(": "<term><expr-prime>", "+": "λ", "-": "λ"
+        "a": "<term> <expr-prime>", "b": "<term> <expr-prime>",
+        "c": "<term> <expr-prime>", "d": "<term> <expr-prime>",
+        "l": "<term> <expr-prime>", "f": "<term> <expr-prime>",
+        "(": "<term> <expr-prime>", "+": "λ", "-": "λ"
     },
     "<expr-prime>": {
-        "+": "+<term><expr-prime>", "-": "-<term><expr-prime>",
+        "+": "+ <term> <expr-prime>", "-": "- <term> <expr-prime>",
         ";": "λ", ")": "λ"
     },
     "<term>": {
-        "a": "<factor><term-prime>", "b": "<factor><term-prime>",
-        "c": "<factor><term-prime>", "d": "<factor><term-prime>",
-        "l": "<factor><term-prime>", "f": "<factor><term-prime>",
-        "(": "<factor><term-prime>"
+        "a": "<factor> <term-prime>", "b": "<factor> <term-prime>",
+        "c": "<factor> <term-prime>", "d": "<factor> <term-prime>",
+        "l": "<factor> <term-prime>", "f": "<factor> <term-prime>",
+        "(": "<factor> <term-prime>"
     },
     "<term-prime>": {
-        "*": "*<factor><term-prime>", "/": "/<factor><term-prime>",
+        "*": "* <factor> <term-prime>", "/": "/ <factor> <term-prime>",
         ";": "λ", ")": "λ", "+": "λ", "-": "λ"
     },
     "<factor>": {
@@ -140,18 +140,18 @@ parsingTable = {
         "7": "<number>", "8": "<number>", "9": "<number>"
     },
     "<number>": {
-        "0": "<sign><digit><number-prime>", "1": "<sign><digit><number-prime>",
-        "2": "<sign><digit><number-prime>", "3": "<sign><digit><number-prime>",
-        "4": "<sign><digit><number-prime>", "5": "<sign><digit><number-prime>",
-        "6": "<sign><digit><number-prime>", "7": "<sign><digit><number-prime>",
-        "8": "<sign><digit><number-prime>", "9": "<sign><digit><number-prime>"
+        "0": "<sign> <digit> <number-prime>", "1": "<sign> <digit> <number-prime>",
+        "2": "<sign> <digit> <number-prime>", "3": "<sign> <digit> <number-prime>",
+        "4": "<sign> <digit> <number-prime>", "5": "<sign> <digit> <number-prime>",
+        "6": "<sign> <digit> <number-prime>", "7": "<sign> <digit> <number-prime>",
+        "8": "<sign> <digit> <number-prime>", "9": "<sign> <digit> <number-prime>"
     },
     "<number-prime>": {
-        "0": "<digit><number-prime>", "1": "<digit><number-prime>",
-        "2": "<digit><number-prime>", "3": "<digit><number-prime>",
-        "4": "<digit><number-prime>", "5": "<digit><number-prime>",
-        "6": "<digit><number-prime>", "7": "<digit><number-prime>",
-        "8": "<digit><number-prime>", "9": "<digit><number-prime>",
+        "0": "<digit> <number-prime>", "1": "<digit> <number-prime>",
+        "2": "<digit> <number-prime>", "3": "<digit> <number-prime>",
+        "4": "<digit> <number-prime>", "5": "<digit> <number-prime>",
+        "6": "<digit> <number-prime>", "7": "<digit> <number-prime>",
+        "8": "<digit> <number-prime>", "9": "<digit> <number-prime>",
         ";": "λ", ")": "λ", "+": "λ", "-": "λ"
     },
     "<sign>": {
