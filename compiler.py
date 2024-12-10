@@ -75,9 +75,9 @@ parsingTable = {
         "d": "<dec> : <type> ;", "l": "<dec> : <type>;", "f": "<dec> : <type> ;"
     },
     "<dec>": {
-        "a": "<identifier> <dec-prime>", "b": "<identifier> <dec-prime>",
-        "c": "<identifier> <dec-prime>", "d": "<identifier> <dec-prime>",
-        "l": "<identifier> <dec-prime>", "f": "<identifier> <dec-prime>"
+        "a": "<identifier>  <dec-prime>", "b": "<identifier> <dec-prime>",
+        "c": "<identifier>  <dec-prime>", "d": "<identifier> <dec-prime>",
+        "l": "<identifier>  <dec-prime>", "f": "<identifier> <dec-prime>"
     },
     "<dec-prime>": {
         ",": ", <dec>", ";": "λ", ":": "λ"
@@ -199,7 +199,7 @@ def compile(userIn: list[str]):
         #Check for if the top of the stack is a rule
         if (stack[0] in parsingTable):
 
-            print("Rule:", stack[0])
+            print("\nRule:", stack[0])
 
             # Decide which rule to follow
             # Deal with reserved words
@@ -221,7 +221,7 @@ def compile(userIn: list[str]):
                 rule = parsingTable[stack.pop(0)][userIn[0]]
 
             else:
-                error(stack[0])
+                error(userIn[0],stack)
 
             #separate and push rule into stack
             for symbol in reversed(rule.split()):
@@ -244,7 +244,7 @@ def compile(userIn: list[str]):
             break
 
         elif(stack[0] in reservedWords and userIn[0] not in reservedWords):
-            error(stack[0])
+            error(userIn[0],stack)
 
         elif(stack[0] == "λ"):
             stack.pop(0)
@@ -254,7 +254,7 @@ def compile(userIn: list[str]):
 
         #temp else case to prevent inf loop
         else:
-            quit()
+            error(userIn[0],stack)
     
     print(stack)
 
@@ -263,20 +263,22 @@ def compile(userIn: list[str]):
 
 
 # Managing error messages
-def error(var: str):
+def error(var: list[str], stackVar: list[str]):
+
     expected = ["program", "var", "begin", "end", "integer", "print"]
     missing = [";",",",".","(",")"]
-    if var == "<prog>":
-        print("program is expected")
-        quit()
-    elif var in expected:
-        print(var,"is expected")
-        quit()
-    elif var in missing:
+    
+
+
+    if stackVar[0] in missing:
         word = ""
-        match var:
+        match stackVar[0]:
             case ";":
-                word = "semicolon"
+                if var == ")":
+                    word = "The left parentheses"
+                    stackVar[0] = "("
+                else:
+                    word = "semicolon"
             case ",":
                 word = "comma"
             case ".":
@@ -285,13 +287,64 @@ def error(var: str):
                 word = "The left parentheses"
             case ")":
                 word = "The right parentheses"
-        print(var,word,"is missing")
+        print(stackVar[0],word,"is missing")
         quit()
+    elif (stackVar[0]) in expected:
+        print(stackVar[0],"is expected")
+        quit()
+    elif(stackVar[0] == "<str>"):
+        print("string is expected")
+        quit()
+    elif(stackVar[0] == "<number-prime>"):
+        print("operation is expected")
+        quit()
+    
     else:
-        print("An error has occurred")
+        #return a list of possible words that was misspelled, pick based on if word is in key or not
+        errorStr = findError(var, expected)
+        for x in errorStr:
+            if x in parsingTable[stackVar[0]]:
+                print(x,"is expected")
         quit()
+    
+    print("An error has occurred")
+    quit()
 
 
+
+#GIVEN A SET OF STRINGS, WHICH STRING IS THE CLOSEST TO MISSPELLED WORD
+# An algorithm we can use for this is Levenshtein distance algo: https://en.wikipedia.org/wiki/Levenshtein_distance
+def findError(var : str, reserved: list[str]) -> str:
+    def levenshteinDistance(word1, word2):
+        word1len, word2len = len(word1), len(word2)
+        dp = [[0] * (word2len + 1) for _ in range(word1len + 1)]
+        
+        for i in range(word1len + 1):
+            dp[i][0] = i
+        for j in range(word2len + 1):
+            dp[0][j] = j
+            
+        for i in range(1, word1len + 1):
+            for j in range(1, word2len + 1):
+                if word1[i - 1] == word2[j - 1]:
+                    dp[i][j] = dp[i - 1][j - 1]
+                else:
+                    dp[i][j] = 1 + min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1])
+        
+        return dp[word1len][word2len]
+    
+    closestWord = None
+    minDistance = float('inf')
+    
+    for word in reserved:
+        dist = levenshteinDistance(var, word)
+        if dist < minDistance:
+            minDistance = dist
+            closestWord = [word]
+        elif dist == minDistance:
+            closestWord.append(word)
+    
+    return closestWord
 
 # Parsing through final24.txt
 userIn = []
