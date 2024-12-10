@@ -204,7 +204,10 @@ def compile(userIn: list[str]):
             # Decide which rule to follow
             # Deal with reserved words
             if (userIn[0] in reservedWords):
-                rule = parsingTable[stack.pop(0)][userIn[0]]
+                if (userIn[0] in parsingTable[stack[0]]):
+                    rule = parsingTable[stack.pop(0)][userIn[0]]
+                else:
+                    error(userIn[0], stack)
 
 
             # Read var. Check if key 'var' is in rule         
@@ -292,19 +295,24 @@ def error(var: list[str], stackVar: list[str]):
     elif (stackVar[0]) in expected:
         print(stackVar[0],"is expected")
         quit()
-    elif(stackVar[0] == "<str>"):
-        print("string is expected")
-        quit()
-    elif(stackVar[0] == "<number-prime>"):
-        print("operation is expected")
-        quit()
-    
     else:
-        #return a list of possible words that was misspelled, pick based on if word is in key or not
-        errorStr = findError(var, expected)
-        for x in errorStr:
-            if x in parsingTable[stackVar[0]]:
-                print(x,"is expected")
+        match stackVar[0]:
+            case "<str>":
+                print("string is expected")
+                quit()
+            case "<number-prime>":
+                print("operation is expected")
+                quit()
+            case "<id-prime>":
+                print("; semicolon is missing")
+                quit()
+            case _:
+                #return a list of possible words that was misspelled, pick based on if word is in key or not
+                errorStr = findError(var, expected)
+                for x in errorStr:
+                    if x in parsingTable[stackVar[0]]:
+                        print(x,"is expected")
+                quit()
         quit()
     
     print("An error has occurred")
