@@ -57,7 +57,7 @@
 # Input goes in, 
 parsingTable = {
     "<prog>": {
-        "program": "program <identifier>; var <dec-list> begin <stat-list> end"
+        "program": "program <identifier> ; var <dec-list> begin <stat-list> end"
     },
     "<identifier>": {
         "a": "<letter> <id-prime>", "b": "<letter> <id-prime>", "c": "<letter> <id-prime>",
@@ -166,6 +166,7 @@ parsingTable = {
     }
 }
 def compile(userIn: list[str]):
+    reservedWords = ["program", "var", "begin", "end", "print"]
     stack = ["<prog>", "$"]
     
     while (stack):
@@ -176,8 +177,19 @@ def compile(userIn: list[str]):
 
         #Check for if the top of the stack is a rule
         if (stack[0] in parsingTable):
-            print("rule:", stack[0])
-            rule = parsingTable[stack.pop(0)][userIn[0]]
+
+            #print(userIn in reservedWords, "or", stack[0] in reservedWords)
+
+            # Decide which rule to follow
+            if (userIn[0] in reservedWords):
+                rule = parsingTable[stack.pop(0)][userIn[0]]
+                        
+            elif (userIn[0][0] in parsingTable[stack[0]]):
+                rule = parsingTable[stack.pop(0)][userIn[0][0]]
+
+            else:
+                error(stack[0])
+
 
             #separate and push rule into stack
             for symbol in reversed(rule.split()):
@@ -193,11 +205,42 @@ def compile(userIn: list[str]):
             print("-"*30)      
 
         #temp else case to prevent inf loop
-        else:
+        elif(stack[0] == userIn[0][0]):
             print("-"*30)
             break
+
+        elif(stack[0] in reservedWords and userIn[0] not in reservedWords):
+                print(stack[0], "is expected")
+                quit()
+        else:
+            quit()
     print(stack)
 
+# Managing error messages
+def error(var: str):
+    expected = ["program", "var", "begin", "end", "integer", "print"]
+    missing = [";",",",".","(",")"]
+    if var == "<prog>":
+        print("program is expected")
+        quit()
+    elif var in expected:
+        print(var,"is expected")
+        quit()
+    elif var in missing:
+        word = ""
+        match var:
+            case ";":
+                word = "semicolon"
+            case ",":
+                word = "comma"
+            case ".":
+                word = "period"
+            case "(":
+                word = "The left parentheses"
+            case ")":
+                word = "The right parentheses"
+        print(var,word,"is missing")
+        quit()
 
 # Parsing through final24.txt
 userIn = []
