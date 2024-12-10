@@ -67,7 +67,8 @@ parsingTable = {
         "0": "<digit> <id-prime>", "1": "<digit> <id-prime>", "2": "<digit> <id-prime>",
         "3": "<digit> <id-prime>", "4": "<digit> <id-prime>", "5": "<digit> <id-prime>",
         "6": "<digit> <id-prime>", "7": "<digit> <id-prime>", "8": "<digit> <id-prime>",
-        "9": "<digit> <id-prime>", ";": "λ", ",": "λ", ":": "λ", "=": "λ"
+        "9": "<digit> <id-prime>", ";": "λ", ",": "λ", ":": "λ", "=": "λ", ")": "λ",
+        "+": "λ", "-": "λ", "*": "λ", "/": "λ"
     },
     "<dec-list>": {
         "a": "<dec> : <type> ;", "b": "<dec> : <type>;", "c": "<dec> : <type> ;",
@@ -93,7 +94,7 @@ parsingTable = {
     "<stat-list-prime>": {
         "a": "<stat-list>", "b": "<stat-list>", "c": "<stat-list>",
         "d": "<stat-list>", "l": "<stat-list>", "f": "<stat-list>",
-        "end": "λ"
+        "print": "<stat-list>", "end": "λ"
     },
     "<stat>": {
         "a": "<assign>", "b": "<assign>", "c": "<assign>", "d": "<assign>",
@@ -103,7 +104,7 @@ parsingTable = {
         "print": "print ( <str> <identifier> ) ;"  
     },
     "<str>": {
-        "value=": "value=", "a": "λ", "b": "λ", "c": "λ", "d": "λ", "l": "λ", "f": "λ"
+        "“Value=”,": "“Value=”,", "a": "λ", "b": "λ", "c": "λ", "d": "λ", "l": "λ", "f": "λ"
     },
     "<assign>": {
         "a": "<identifier> = <expr> ;", "b": "<identifier> = <expr> ;",
@@ -146,22 +147,24 @@ parsingTable = {
         "7": "<number>", "8": "<number>", "9": "<number>"
     },
     "<number>": {
-        "0": "<sign> <digit> <number-prime>", "1": "<sign> <digit> <number-prime>",
-        "2": "<sign> <digit> <number-prime>", "3": "<sign> <digit> <number-prime>",
-        "4": "<sign> <digit> <number-prime>", "5": "<sign> <digit> <number-prime>",
-        "6": "<sign> <digit> <number-prime>", "7": "<sign> <digit> <number-prime>",
-        "8": "<sign> <digit> <number-prime>", "9": "<sign> <digit> <number-prime>"
-    },
-    "<number-prime>": {
         "0": "<digit> <number-prime>", "1": "<digit> <number-prime>",
         "2": "<digit> <number-prime>", "3": "<digit> <number-prime>",
         "4": "<digit> <number-prime>", "5": "<digit> <number-prime>",
         "6": "<digit> <number-prime>", "7": "<digit> <number-prime>",
-        "8": "<digit> <number-prime>", "9": "<digit> <number-prime>",
-        ";": "λ", ")": "λ", "+": "λ", "-": "λ"
+        "8": "<digit> <number-prime>", "9": "<digit> <number-prime>"
+    },
+    "<number-prime>": {
+        "0": "<sign> <number> <number-prime>", "1": "<sign> <number> <number-prime>",
+        "2": "<sign> <number> <number-prime>", "3": "<sign> <number> <number-prime>",
+        "4": "<sign> <number> <number-prime>", "5": "<sign> <number> <number-prime>",
+        "6": "<sign> <number> <number-prime>", "7": "<sign> <number> <number-prime>",
+        "8": "<sign> <number> <number-prime>", "9": "<sign> <number> <number-prime>",
+        ";": "λ", ")": "λ", "+": "λ", "-": "λ", "*": "λ", "/": "λ"
     },
     "<sign>": {
-        "+": "+", "-": "-", "0": "λ", "1": "λ"
+        "+": "+", "-": "-", "0": "λ", "1": "λ",
+        "2": "λ", "3": "λ", "4": "λ", "5": "λ",
+        "7": "λ", "8": "λ", "9": "λ"
     },
     "<digit>": {
         "0": "0", "1": "1", "2": "2", "3": "3", "4": "4",
@@ -181,6 +184,13 @@ def compile(userIn: list[str]):
 
 
     while (stack):
+
+        #Early exit to prevent bound error when done 
+        if (stack == ["$"] and len(userIn) == 0):
+            print("Ready to compile")
+            quit()
+
+
         #Display
         print("{:20}{:<20}".format("USER INPUT", "STACK"))
         for a, b in zip(userIn, stack):
@@ -188,25 +198,26 @@ def compile(userIn: list[str]):
 
         #Check for if the top of the stack is a rule
         if (stack[0] in parsingTable):
+
             print("Rule:", stack[0])
-            print(userIn[0] in parsingTable[stack[0]],userIn[0][0] in parsingTable[stack[0]],userIn[0] in reservedWords)
+
             # Decide which rule to follow
             # Deal with reserved words
             if (userIn[0] in reservedWords):
                 rule = parsingTable[stack.pop(0)][userIn[0]]
 
+
             # Read var. Check if key 'var' is in rule         
             elif (userIn[0][0] in parsingTable[stack[0]]):
                 # THIS BREAKS APART USERIN[0] SO THAT OTHER RULES CAN USE THE INDIVIDUAL LETTERS
                 rule = parsingTable[stack.pop(0)][userIn[0][0]]
-                print(userIn[0].split())
                 temp = userIn.pop(0)
                 for x in range(len(temp)-1,-1,-1):
                     userIn.insert(0,temp[x])
 
+
             # apply individual letters/digits rule
             elif (userIn[0] in parsingTable[stack[0]]):
-                print("run")
                 rule = parsingTable[stack.pop(0)][userIn[0]]
 
             else:
@@ -224,7 +235,6 @@ def compile(userIn: list[str]):
 
         # If stack and userIn top read the same, pop both and move next
         elif (stack[0] == userIn[0]):
-            #print("stack v:", stack)
             stack.pop(0)
             userIn.pop(0)
             print("-"*30)      
@@ -234,18 +244,18 @@ def compile(userIn: list[str]):
             break
 
         elif(stack[0] in reservedWords and userIn[0] not in reservedWords):
-                print(stack[0], "is expected")
-                quit()
+            error(stack[0])
 
         elif(stack[0] == "λ"):
             stack.pop(0)
-            print("lambda")
-            print(stack[0])
+            print("-"*30) 
+
 
 
         #temp else case to prevent inf loop
         else:
             quit()
+    
     print(stack)
 
 
@@ -277,7 +287,9 @@ def error(var: str):
                 word = "The right parentheses"
         print(var,word,"is missing")
         quit()
-    quit()
+    else:
+        print("An error has occurred")
+        quit()
 
 
 
