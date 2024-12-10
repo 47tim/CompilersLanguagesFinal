@@ -181,11 +181,22 @@ def compile(userIn: list[str]):
             #print(userIn in reservedWords, "or", stack[0] in reservedWords)
 
             # Decide which rule to follow
+            # Deal with reserved words
             if (userIn[0] in reservedWords):
                 rule = parsingTable[stack.pop(0)][userIn[0]]
-                        
+
+            # Read var. Check if key 'var' is in rule         
             elif (userIn[0][0] in parsingTable[stack[0]]):
+                # THIS BREAKS APART USERIN[0] SO THAT OTHER RULES CAN USE THE INDIVIDUAL LETTERS
                 rule = parsingTable[stack.pop(0)][userIn[0][0]]
+                print(userIn[0].split())
+                temp = userIn.pop(0)
+                for x in range(len(temp)-1,-1,-1):
+                    userIn.insert(0,temp[x])
+
+            # apply individual letters/digits rule
+            elif (userIn[0] in parsingTable[stack[0]]):
+                rule = parsingTable[stack.pop(0)][userIn[0]]
 
             else:
                 error(stack[0])
