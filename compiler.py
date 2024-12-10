@@ -52,7 +52,9 @@
 # <letter> -> a|b|c|d|l||f
 
 
-# I am not sure what to do with <prog> though, so I will leave it like this for the time being.
+#Example of how this works:
+# Start with a new stack ["<prog>",$]
+# Input goes in, 
 parsingTable = {
     "<prog>": {
         "program": "program <identifier>; var <dec-list> begin <stat-list> end"
@@ -163,3 +165,12 @@ parsingTable = {
         "a": "a", "b": "b", "c": "c", "d": "d", "l": "l", "f": "f"
     }
 }
+
+
+
+# Parsing through final24.txt
+userIn = []
+with open('final24.txt', encoding="UTF-8") as f: file = f.read() #final24.txt uses UTF-8 encoding, without including this the file can not be read because open() is defaulted to CP1252 encoding
+userIn = file.split()
+#print(userIn)
+
