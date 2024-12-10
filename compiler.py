@@ -52,9 +52,7 @@
 # <letter> -> a|b|c|d|l||f
 
 
-#Example of how this works:
-# Start with a new stack ["<prog>",$]
-# Input goes in, 
+
 parsingTable = {
     "<prog>": {
         "program": "program <identifier> ; var <dec-list> begin <stat-list> end"
@@ -165,10 +163,15 @@ parsingTable = {
         "a": "a", "b": "b", "c": "c", "d": "d", "l": "l", "f": "f"
     }
 }
+
+
+
 def compile(userIn: list[str]):
     reservedWords = ["program", "var", "begin", "end", "print"]
     stack = ["<prog>", "$"]
     
+
+
     while (stack):
         #Display
         print("{:20}{:<20}".format("USER INPUT", "STACK"))
@@ -177,8 +180,7 @@ def compile(userIn: list[str]):
 
         #Check for if the top of the stack is a rule
         if (stack[0] in parsingTable):
-
-            #print(userIn in reservedWords, "or", stack[0] in reservedWords)
+            print("Rule:", stack[0])
 
             # Decide which rule to follow
             # Deal with reserved words
@@ -201,12 +203,15 @@ def compile(userIn: list[str]):
             else:
                 error(stack[0])
 
-
             #separate and push rule into stack
             for symbol in reversed(rule.split()):
                 stack.insert(0, symbol)
 
             print("-"*30)
+
+
+
+
 
         # If stack and userIn top read the same, pop both and move next
         elif (stack[0] == userIn[0]):
@@ -215,7 +220,6 @@ def compile(userIn: list[str]):
             userIn.pop(0)
             print("-"*30)      
 
-        #temp else case to prevent inf loop
         elif(stack[0] == userIn[0][0]):
             print("-"*30)
             break
@@ -223,9 +227,15 @@ def compile(userIn: list[str]):
         elif(stack[0] in reservedWords and userIn[0] not in reservedWords):
                 print(stack[0], "is expected")
                 quit()
+
+        #temp else case to prevent inf loop
         else:
             quit()
     print(stack)
+
+
+
+
 
 # Managing error messages
 def error(var: str):
@@ -252,6 +262,8 @@ def error(var: str):
                 word = "The right parentheses"
         print(var,word,"is missing")
         quit()
+
+
 
 # Parsing through final24.txt
 userIn = []
