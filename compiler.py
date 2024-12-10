@@ -100,7 +100,7 @@ parsingTable = {
         "l": "<assign>", "f": "<assign>", "print": "<write>"
     },
     "<write>": {
-        "print": "print(<str><identifier>);" #REVISIT 
+        "print": "print ( <str> <identifier> ) ;"  
     },
     "<str>": {
         "value=": "value=", "a": "λ", "b": "λ", "c": "λ", "d": "λ", "l": "λ", "f": "λ"
@@ -141,7 +141,7 @@ parsingTable = {
     "<factor>": {
         "a": "<identifier>", "b": "<identifier>", "c": "<identifier>",
         "d": "<identifier>", "l": "<identifier>", "f": "<identifier>",
-        "(": "(<expr>)", "0": "<number>", "1": "<number>", "2": "<number>",
+        "(": "( <expr> )", "0": "<number>", "1": "<number>", "2": "<number>",
         "3": "<number>", "4": "<number>", "5": "<number>", "6": "<number>",
         "7": "<number>", "8": "<number>", "9": "<number>"
     },
