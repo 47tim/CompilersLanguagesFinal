@@ -165,12 +165,44 @@ parsingTable = {
         "a": "a", "b": "b", "c": "c", "d": "d", "l": "l", "f": "f"
     }
 }
+def compile(userIn: list[str]):
+    stack = ["<prog>", "$"]
+    
+    while (stack):
+        #Display
+        print("{:20}{:<20}".format("USER INPUT", "STACK"))
+        for a, b in zip(userIn, stack):
+            print ("{:<10}{:<10}{:<10}".format(a,"||",b))
 
+        #Check for if the top of the stack is a rule
+        if (stack[0] in parsingTable):
+            print("rule:", stack[0])
+            rule = parsingTable[stack.pop(0)][userIn[0]]
+
+            #separate and push rule into stack
+            for symbol in reversed(rule.split()):
+                stack.insert(0, symbol)
+
+            print("-"*30)
+
+        # If stack and userIn top read the same, pop both and move next
+        elif (stack[0] == userIn[0]):
+            #print("stack v:", stack)
+            stack.pop(0)
+            userIn.pop(0)
+            print("-"*30)      
+
+        #temp else case to prevent inf loop
+        else:
+            print("-"*30)
+            break
+    print(stack)
 
 
 # Parsing through final24.txt
 userIn = []
 with open('final24.txt', encoding="UTF-8") as f: file = f.read() #final24.txt uses UTF-8 encoding, without including this the file can not be read because open() is defaulted to CP1252 encoding
 userIn = file.split()
-#print(userIn)
+compile(userIn)
+
 
