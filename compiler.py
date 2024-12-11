@@ -1,4 +1,8 @@
 #CPSC 323 FINAL PROJECT
+#Mark Gaballa, Timothy Hyde, Dylan Zuniga
+#Due Date: 12-11-2024
+#Purpose: Create a compiler to parse through a file
+#and output whether or not it is ready to compile
 
 
 # First things first, given the grammar, it would be best to remove the left recursion
