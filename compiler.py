@@ -269,10 +269,10 @@ def compile(userIn: list[str]):
 def error(var: list[str], stackVar: list[str]):
 
     expected = ["program", "var", "begin", "end", "integer", "print"]
-    missing = [";",",",".","(",")"]
+    missing = [";",",",".","(",")",":"]
     
 
-
+    # Error catching cases
     if stackVar[0] in missing:
         word = ""
         match stackVar[0]:
@@ -290,6 +290,8 @@ def error(var: list[str], stackVar: list[str]):
                 word = "The left parentheses"
             case ")":
                 word = "The right parentheses"
+            case ":":
+                word = "colon"
         print(stackVar[0],word,"is missing")
         quit()
     elif (stackVar[0]) in expected:
