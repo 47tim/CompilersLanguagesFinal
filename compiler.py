@@ -312,6 +312,30 @@ def error(var: list[str], stackVar: list[str]):
             case "<id-prime>":
                 print("; semicolon is missing")
                 quit()
+            case "<stat-list>":
+                if (var[0] == "="):
+                    print("assignment without variable")
+                elif (var[0] == ";"):
+                    print("unexpected semicolon")
+                else:
+                    errorStr = findError(var, expected)
+                    for x in errorStr:
+                        if x in parsingTable[stackVar[0]]:
+                            print(x,"is expected")
+                quit()
+
+            case "<stat-list-prime>":
+                if (var[0] == "="):
+                    print("assignment without variable")
+                elif (var[0] == ";"):
+                    print("unexpected semicolon")
+                else:
+                    errorStr = findError(var, expected)
+                    for x in errorStr:
+                        if x in parsingTable[stackVar[0]]:
+                            print(x,"is expected")
+                quit()
+
             case _:
                 #return a list of possible words that was misspelled, pick based on if word is in key or not
                 errorStr = findError(var, expected)
